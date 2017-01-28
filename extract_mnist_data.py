@@ -45,8 +45,7 @@ print("Initializing... Loading training and test data...")
 print("Finished loading data")
 
 def main():
-	""" Do nothing """
-	print()
+	pass
 
 if __name__ == "__main__":
 	main()
