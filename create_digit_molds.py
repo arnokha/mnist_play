@@ -1,6 +1,9 @@
+##
 ## Average the cases in the training set to create a "mold" to use for predictions
 ## We know that this won't work as well as the ML methods, but I want to use this benchmark as the "low bar" to beat
+##
 ## Author: Arno Khachatourian
+##
 
 import numpy as np
 from extract_mnist_data import data2arrays
@@ -14,7 +17,7 @@ def count_labels( labels , n_labels ):
 
 	return label_count
 
-def main():
+def create_molds():
 	## Initialize data structures
 	n_train = 60000
 	n_test = 10000
@@ -44,6 +47,10 @@ def main():
 	for i in range(n_labels):
 		molds[i,:] = molds[i,:] / label_counter[i]
 
+	return molds
+
+def main():
+	create_molds()
 
 if __name__ == "__main__":
 	main()

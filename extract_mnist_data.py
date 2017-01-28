@@ -1,21 +1,35 @@
+##
 ## Loosely adapted from: http://pjreddie.com/projects/mnist-in-csv/
+##
 ## Data sets are from: http://yann.lecun.com/exdb/mnist/
+##
 ## Author: Arno Khachatourian
+##
 
 import numpy as np
 
-n_train = 60000
-n_test = 10000
-img_dimensions = 28 * 28
+def main():
+	""" Extract MNIST data into training and test arrays """
+	## Variable Declarations
+	n_train = 60000
+	n_test = 10000
+	img_dimensions = 28 * 28
 
-x_train = np.zeros((n_train, img_dimensions), dtype=np.uint8)
-y_train = np.zeros((n_train, 1), dtype=np.uint8)
-x_test = np.zeros((n_test, img_dimensions), dtype=np.uint8)
-y_test = np.zeros((n_test, 1), dtype=np.uint8)
+	x_train = np.zeros((n_train, img_dimensions), dtype=np.uint8)
+	y_train = np.zeros((n_train, 1), dtype=np.uint8)
+	x_test = np.zeros((n_test, img_dimensions), dtype=np.uint8)
+	y_test = np.zeros((n_test, 1), dtype=np.uint8)
+
+	## Load the training and test data into arrays 
+	print("Initializing... Loading training and test data...")
+	(x_train, y_train) = data2arrays("data/train-images-idx3-ubyte", "data/train-labels-idx1-ubyte", x_train, y_train, n_train)
+	(x_test, y_test) = data2arrays("data/t10k-images-idx3-ubyte", "data/t10k-labels-idx1-ubyte", x_test, y_test, n_test)
+	print("Finished loading data")
 
 def data2arrays(image_file, label_file, x, y, n):
 	""" Extract the training and test data into numpy arrays """
 	# Open files for reading
+	img_dimensions = 28 * 28
 	img_reader = open(image_file, "rb")
 	lbl_reader = open(label_file, "rb")
 
@@ -30,8 +44,5 @@ def data2arrays(image_file, label_file, x, y, n):
 	
 	return (x,y)
 
-## Load the training and test data into arrays 
-print("Initializing... Loading training and test data...")
-(x_train, y_train) = data2arrays("data/train-images-idx3-ubyte", "data/train-labels-idx1-ubyte", x_train, y_train, n_train)
-(x_test, y_test) = data2arrays("data/t10k-images-idx3-ubyte", "data/t10k-labels-idx1-ubyte", x_test, y_test, n_test)
-print("Finished loading data")
+if __name__ == "__main__":
+	main()

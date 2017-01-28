@@ -1,5 +1,8 @@
-## Loosely adapted from http://pjreddie.com/projects/mnist-in-csv/
+##
+## Print a few examples of the training and test data in human readable form
+##
 ## Author: Arno Khachatourian
+##
 
 import numpy as np
 
