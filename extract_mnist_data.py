@@ -30,6 +30,7 @@ def data2arrays(image_file, label_file, x, y, n):
 ## Variable Declarations
 n_train = 60000
 n_test = 10000
+n_labels = 10
 img_dimensions = 28 * 28
 
 x_train = np.zeros((n_train, img_dimensions), dtype=np.uint8)

@@ -6,10 +6,10 @@
 ##
 
 import numpy as np
-from extract_mnist_data import data2arrays
-from create_digit_molds import create_molds, count_labels
+import create_digit_molds
+## from create_digit_molds import create_molds, count_labels
 
-def print_molds():
+def print_molds(molds):
 	""" Print the molds created by create_digit_molds.py """
 	n_labels = 10
 
@@ -26,8 +26,8 @@ def print_molds():
 		print()
 
 def main():
-	molds = create_molds()
-	print_molds()
+	molds = create_digit_molds.create_molds()
+	print_molds(molds)
 
 ## Main
 if __name__ == "__main__":
