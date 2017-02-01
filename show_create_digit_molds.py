@@ -7,7 +7,6 @@
 
 import numpy as np
 import create_digit_molds
-## from create_digit_molds import create_molds, count_labels
 
 def print_molds(molds):
 	""" Print the molds created by create_digit_molds.py """

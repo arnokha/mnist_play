@@ -49,8 +49,10 @@ def create_regularized_molds():
 	# Regularize
 	mold_regulaizer = mold_pixel_count / 10000
 	for label in range(mnist.n_labels):
-		for pixel in range(mnist.img_dimensions):
-			r_molds[label,pixel] = r_molds[label,pixel] / mold_regulaizer[label]
+		r_molds[label,:] = r_molds[label,:] / mold_regulaizer[label]
+#	for label in range(mnist.n_labels):
+#		for pixel in range(mnist.img_dimensions):
+#			r_molds[label,pixel] = r_molds[label,pixel] / mold_regulaizer[label]
 
 	return r_molds
 

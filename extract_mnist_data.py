@@ -39,10 +39,10 @@ x_test = np.zeros((n_test, img_dimensions), dtype=np.uint8)
 y_test = np.zeros((n_test, 1), dtype=np.uint8)
 
 ## Load the training and test data into arrays 
-print("Initializing... Loading training and test data...")
+## print("Initializing... Loading training and test data...")
 (x_train, y_train) = data2arrays("data/train-images-idx3-ubyte", "data/train-labels-idx1-ubyte", x_train, y_train, n_train)
 (x_test, y_test) = data2arrays("data/t10k-images-idx3-ubyte", "data/t10k-labels-idx1-ubyte", x_test, y_test, n_test)
-print("Finished loading data")
+## print("Finished loading data")
 
 def main():
 	pass
