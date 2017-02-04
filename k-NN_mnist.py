@@ -10,6 +10,7 @@ from scipy import stats
 import extract_mnist_data as mnist
 ## Now have access to x_train, y_train, x_test, y_test, n_train, n_test, img_dimensions, and n_labels
 
+## Should consider trying out different distance functions to see how the error rate is affected
 def distance(x1, x2):
 	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
 	return np.sum(abs(x1 - x2))
@@ -39,7 +40,7 @@ def kNN(k):
 			labels_of_nearest_neighbors[i,k_index] = mnist.y_train[ nearest_neighbors[i,k_index] ]
 
 		predictions[i] = stats.mode(labels_of_nearest_neighbors[i], axis=None)[0][0]
-		print( str(predictions[i]) + "," + str(mnist.y_test[i]) )
+#		print( str(predictions[i]) + "," + str(mnist.y_test[i]) )
 
 	return predictions
 
