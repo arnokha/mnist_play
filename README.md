@@ -22,9 +22,7 @@ Error rate on the training data was: 0.37868333333333337
 
 #### k-NN (k = 245) (distance = sum(abs(x1 - x2)))
 
-Testing k-NN on test data...
-
-Total training time (time to create molds) was: 5543.033263341989 seconds
-Total test time was (on test data): 0.0413792310282588 seconds
+Total training time (time to create molds) was: 5543.033263341989 seconds  
+Total test time was (on test data): 0.0413792310282588 seconds  
 
 **Error rate on the test data was: 0.240**
