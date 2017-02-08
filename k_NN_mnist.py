@@ -19,13 +19,12 @@ def print_mnist_kNN_to_file(filename, distance_function):
 	    This will print labels in order of closeness to the test point (closeness determined by given distance function).
 	    That way if you want to do, for example, k-NN with k = 9, you just take the mode of the first 9 labels per row.
 	"""
-	print("Filename is " + str(filename) + " and dfun is " + distance_function.__name__)
+	print("Filename is " + filename + " and dfun is " + distance_function.__name__)
 	k = 1000
 	labels_of_nearest_neighbors = kNN(k, distance_function)[1] ## size is (mnist.n_test, k)
 	print("kNN has finished running for k = " + str(k) + " and distance function " + str(distance_function))
 	print("Printing results to " + str(filename))
-
-	## TODO print array to file
+	np.savetxt(filename, labels_of_nearest_neighbors, delimiter=",")
 
 
 def kNN(k, distance_function):
