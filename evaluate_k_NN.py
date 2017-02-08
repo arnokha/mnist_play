@@ -8,7 +8,6 @@
 ##
 ## Author: Arno Khachatourian 
 ##
-## TODO test on training data (need to modify k-NN_mnist.py first, so that this will be possible)
 
 import time
 import numpy as np
@@ -17,7 +16,7 @@ print("Extracting MNIST data...")
 import extract_mnist_data as mnist
 print("Done")
 
-from k_NN_mnist import distance
+from k_NN_mnist import pixel_distance
 from k_NN_mnist import kNN
 ## Can now access x_train, y_train, x_test, y_test, img_dimensions, n_train, y_train, n_labels
 
@@ -35,7 +34,7 @@ print("Running k-NN... This will take a while! For this run I have selected k = 
 k = 245
 
 start = time.perf_counter()
-prediction = kNN(k)
+prediction = kNN(k, pixel_distance)[0]
 end = time.perf_counter()
 
 total_training_time = (end - start)

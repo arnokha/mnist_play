@@ -10,19 +10,25 @@ from scipy import stats ## For mode calculation
 import extract_mnist_data as mnist ## Now have access to x_train, y_train, x_test, y_test, n_train, n_test, img_dimensions, and n_labels
 
 ## Should consider trying out different distance functions to see how the error rate is affected
-def distance(x1, x2):
+def pixel_distance(x1, x2):
 	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
 	return np.sum(abs(x1 - x2))
 
-def print_mnist_kNN_to_file(filename):
-	""" Since k-NN is so computationally expensive, print labels of all nearest neighbors to a file to read, with k = max (60,000)
-	    This will print labels in order of closeness to the test point. That way if you want to do, for example, k-NN with k = 9,
-	    you just take the mode of the first 9 labels per row.
+def print_mnist_kNN_to_file(filename, distance_function):
+	""" Since k-NN is so computationally expensive, print labels of all nearest neighbors to a file to read, with k = 1000
+	    This will print labels in order of closeness to the test point (closeness determined by given distance function).
+	    That way if you want to do, for example, k-NN with k = 9, you just take the mode of the first 9 labels per row.
 	"""
-	k = 60000
-	pass
+	print("Filename is " + str(filename) + " and dfun is " + distance_function.__name__)
+	k = 1000
+	labels_of_nearest_neighbors = kNN(k, distance_function)[1] ## size is (mnist.n_test, k)
+	print("kNN has finished running for k = " + str(k) + " and distance function " + str(distance_function))
+	print("Printing results to " + str(filename))
 
-def kNN(k):
+	## TODO print array to file
+
+
+def kNN(k, distance_function):
 	""" Uses k-NN to return predictions based on the labels of the k nearest neighbors. Does not use weighting """
 	## Initialize variables
 	max_distance = 28 * 28 * 255
@@ -37,7 +43,7 @@ def kNN(k):
 	##
 	for i in range(mnist.n_test):
 		for neighbor in range(mnist.n_train):
-			d[i,neighbor] = distance( mnist.x_test[i,:], mnist.x_train[neighbor,:] )
+			d[i,neighbor] = distance_function( mnist.x_test[i,:], mnist.x_train[neighbor,:] )
 
 		if i % 500 == 0:
 			print(str(i)) ## For sanity reasons 
@@ -51,16 +57,11 @@ def kNN(k):
 		predictions[i] = stats.mode(labels_of_nearest_neighbors[i], axis=None)[0][0]
 #		print( str(predictions[i]) + "," + str(mnist.y_test[i]) )
 
-	return predictions
+	return (predictions, labels_of_nearest_neighbors)
 
 def main():
-
-	k = int(input("Enter an odd number to use for k-Nearest-Neighbors: "))
-	if ( k % 2 == 0): 
-		## Number is even. Prompt user for an odd number
-		print(str(k) + " is an even number. Please enter an odd number.")
-		exit()
-	kNN(k)
+	k = int(input("Enter a number to use for k-Nearest-Neighbors: "))
+	kNN(k, pixel_distance)
 
 
 if __name__ == "__main__":
