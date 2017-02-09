@@ -9,8 +9,11 @@ import numpy as np
 from scipy import stats ## For mode calculation
 import extract_mnist_data as mnist ## Now have access to x_train, y_train, x_test, y_test, n_train, n_test, img_dimensions, and n_labels
 
-## Should consider trying out different distance functions to see how the error rate is affected
-def pixel_distance(x1, x2):
+def l2_distance(x1, x2):
+	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
+	return np.sqrt( np.sum( (x1 - x2) ** 2) )
+
+def l1_distance(x1, x2):
 	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
 	return np.sum(abs(x1 - x2))
 
@@ -22,9 +25,10 @@ def print_mnist_kNN_to_file(filename, distance_function):
 	print("Filename is " + filename + " and dfun is " + distance_function.__name__)
 	k = 1000
 	labels_of_nearest_neighbors = kNN(k, distance_function)[1] ## size is (mnist.n_test, k)
-	print("kNN has finished running for k = " + str(k) + " and distance function " + str(distance_function))
+	print("kNN has finished running for k = " + str(k) + " and distance function " + distance_function.__name__)
 	print("Printing results to " + str(filename))
-	np.savetxt(filename, labels_of_nearest_neighbors, delimiter=",")
+	np.savetxt(filename, labels_of_nearest_neighbors, delimiter=",", fmt='%1u')
+	print("Done")
 
 
 def kNN(k, distance_function):
@@ -60,7 +64,7 @@ def kNN(k, distance_function):
 
 def main():
 	k = int(input("Enter a number to use for k-Nearest-Neighbors: "))
-	kNN(k, pixel_distance)
+	kNN(k, l1_distance)
 
 
 if __name__ == "__main__":
