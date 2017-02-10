@@ -17,65 +17,44 @@ print("Extracting MNIST data...")
 import extract_mnist_data as mnist
 print("Done")
 
-## from k_NN_mnist import l1_distance
-## from k_NN_mnist import l2_distance
-## from k_NN_mnist import kNN
-## Can now access x_train, y_train, x_test, y_test, img_dimensions, n_train, y_train, n_labels
+##
+## Read labels from preprocessed CSVs
+##
 
-total_training_time = 0
-total_training_test_time = 0
-total_test_time = 0
-
-training_accuracy = 0
-test_accuracy = 0
+l1_labels = np.genfromtxt('knn_results/l1_distance_kNN_1000.csv', delimiter=',')
+# L2 sucks for this -- l2_labels = np.genfromtxt('knn_results/l2_distance_kNN_1000.csv', delimiter=',')
 
 ##
-## Measure training time
+## For k from 10-1000, (in increments of 10), test the accuracy of k-NN (using both L1 and L2 distances)
 ##
-## print("Running k-NN... This will take a while! For this run I have selected k = 245")
+k_range = range(1,100)
 
-k = 100
+## Big values of k also suck
 
-l1_labels = np.genfromtxt('l1_distance_kNN_1000.csv', delimiter=',')
-l2_labels = np.genfromtxt('l2_distance_kNN_1000.csv', delimiter=',')
+score_l1 = np.zeros((len(k_range), 1))
 
-k_l1_labels = l1_labels[:,0:k]
-k_l2_labels = l2_labels[:,0:k]
+i = 0 ## for scoring
 
-print(k_l1_labels.shape)
-print(k_l2_labels.shape)
+for k in k_range:
+	## Get k columns of labels
+	k_l1_labels = l1_labels[:, 0:k]
 
-l1_predictions = stats.mode(k_l1_labels, axis=1)[0]
-l2_predictions = stats.mode(k_l2_labels, axis=1)[0]
+	## Predict the mode of the k labels
+	l1_predictions = stats.mode(k_l1_labels, axis=1)[0]
 
-start = time.perf_counter()
-## prediction = kNN(k, pixel_distance)[0]
-end = time.perf_counter()
+	## L1 Scoring
+	for test_case in range(mnist.n_test):
+		if (l1_predictions[test_case] == mnist.y_test[test_case]):
+			score_l1[i] += 1
 
-total_training_time = (end - start)
+	i += 1
 
-##
-## Test k-NN on test data
-##
-print("Testing k-NN on test data...")
-score = 0
+accuracy_l1 = score_l1 / mnist.n_test 
+error_l1 = 1 - accuracy_l1
 
-start = time.perf_counter()
-##for i in range(mnist.n_test):
-##	if (prediction[i] == mnist.y_test[i]):
-##		score = score + 1
-end = time.perf_counter()
-test_accuracy = score / mnist.n_test
-total_test_time = (end - start)
+best_k = np.argmin(error_l1)
+smallest_error = np.min(error_l1)
 
-
-## Calculate error
-training_error = 1 - training_accuracy
-test_error = 1 - test_accuracy
-
-## Report Metrics
-print()
-print("Total training time (time to create molds) was: " + str(total_training_time) + " seconds")
-print("Total test time was (on test data): " + str(total_test_time) + " seconds")
-print()
-print("Error rate on the test data was: " + str(test_error))
+print("The value of k that produced the lowest error rate was " + str(best_k))
+print("The accuracy on the test set was " + str(1 - smallest_error))
+print("The error on the test set was " + str(smallest_error))
