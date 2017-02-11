@@ -9,6 +9,11 @@ import numpy as np
 from scipy import stats ## For mode calculation
 import extract_mnist_data as mnist ## Now have access to x_train, y_train, x_test, y_test, n_train, n_test, img_dimensions, and n_labels
 
+## TODO
+## weighted_k_NN(k, distance_function)
+## print_k_NN_with_weighting_to_file(filename, distance_function)
+## alt_k_NN(distance_threshold, distance_function)
+
 def l2_distance(x1, x2):
 	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
 	return np.sqrt( np.sum( (x1 - x2) ** 2) )
@@ -30,7 +35,38 @@ def print_mnist_kNN_to_file(filename, distance_function):
 	np.savetxt(filename, labels_of_nearest_neighbors, delimiter=",", fmt='%1u')
 	print("Done")
 
+## for distance, use 10k-15k
+def alt_kNN(distance_threshold, distance_function):
+	""" This algorithm is probably already named, but I dont know it, so Im just going to call it alt_kNN.
+	    Instead of using k_NN, set a radial distance threshold around a test case and take the mode
+	    of those labels as the prediction.
+	"""
+	## Initialize variables
+	#max_distance = 28 * 28 * 255
+	d = np.zeros((mnist.n_test, mnist.n_train), dtype=np.uint32) # Max value is 28 * 28 * 255 = 199,920
+	prediction = np.zeros((mnist.n_test, 1), dtype=np.uint8) # Max value is 9
+	confidence = np.zeros((mnist.n_test, 1))
 
+	##
+	## Loop through test set, calculate distance between each test and training example, 
+	## find neighbors with difference under threshold, and use the mode of their labels to predict the label of the test example
+	##
+	for i in range(mnist.n_test):
+		label_list = []
+		for neighbor in range(mnist.n_train):
+			d[i,neighbor] = distance_function( mnist.x_test[i,:], mnist.x_train[neighbor,:] )
+			if d[i,neighbor] < distance_threshold:
+				label_list.append(mnist.y_train[neighbor])
+
+		if (len(label_list) != 0):
+			prediction[i] = mode(label_list)[0][0]
+			confidence[i] = mode(label_list)[1][0] / len(label_list)
+		else:
+			prediction[i] = -1
+
+	return (predictions, confidence)
+
+## TODO optional parameter -- filename with close labels
 def kNN(k, distance_function):
 	""" Uses k-NN to return predictions based on the labels of the k nearest neighbors. Does not use weighting """
 	## Initialize variables
