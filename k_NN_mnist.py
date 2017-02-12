@@ -12,7 +12,6 @@ import extract_mnist_data as mnist ## Now have access to x_train, y_train, x_tes
 ## TODO
 ## weighted_k_NN(k, distance_function)
 ## print_k_NN_with_weighting_to_file(filename, distance_function)
-## alt_k_NN(distance_threshold, distance_function)
 
 def l2_distance(x1, x2):
 	""" This distance function just takes the absolute value of the differences in pixel intensities between these two images """
@@ -59,12 +58,12 @@ def alt_kNN(distance_threshold, distance_function):
 				label_list.append(mnist.y_train[neighbor])
 
 		if (len(label_list) != 0):
-			prediction[i] = mode(label_list)[0][0]
-			confidence[i] = mode(label_list)[1][0] / len(label_list)
+			prediction[i] = stats.mode(label_list)[0][0]
+			confidence[i] = stats.mode(label_list)[1][0] / len(label_list)
 		else:
-			prediction[i] = -1
+			prediction[i] = 10
 
-	return (predictions, confidence)
+	return (prediction, confidence)
 
 ## TODO optional parameter -- filename with close labels
 def kNN(k, distance_function):
